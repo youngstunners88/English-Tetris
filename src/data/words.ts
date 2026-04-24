@@ -1,73 +1,61 @@
-// Word banks by category
-const wordBanks: Record<string, string[]> = {
-  general: [
-    'hello', 'world', 'computer', 'language', 'learning', 'education',
-    'knowledge', 'science', 'technology', 'future', 'progress', 'success',
-    'dream', 'hope', 'believe', 'achieve', 'create', 'innovate',
-    'discover', 'explore', 'adventure', 'journey', 'destination', 'path',
-    'bridge', 'connection', 'network', 'community', 'society', 'culture',
-    'history', 'memory', 'experience', 'wisdom', 'truth', 'beauty',
-    'nature', 'environment', 'ecosystem', 'planet', 'universe', 'galaxy',
-  ],
-  business: [
-    'strategy', 'management', 'leadership', 'innovation', 'marketing',
-    'finance', 'investment', 'revenue', 'profit', 'growth', 'expansion',
-    'partnership', 'negotiation', 'contract', 'agreement', 'deal',
-    'stakeholder', 'shareholder', 'boardroom', 'executive', 'entrepreneur',
-    'startup', 'venture', 'capital', 'equity', 'valuation', 'acquisition',
-    'merger', 'diversification', 'portfolio', 'benchmark', 'performance',
-    'analytics', 'metrics', 'KPI', 'ROI', 'efficiency', 'productivity',
-  ],
-  academic: [
-    'research', 'hypothesis', 'methodology', 'analysis', 'synthesis',
-    'evaluation', 'assessment', 'criteria', 'evidence', 'conclusion',
-    'argument', 'thesis', 'dissertation', 'publication', 'peer-review',
-    'citation', 'reference', 'bibliography', 'abstract', 'introduction',
-    'literature', 'theoretical', 'empirical', 'qualitative', 'quantitative',
-    'interdisciplinary', 'paradigm', 'framework', 'conceptual', 'operational',
-    'validity', 'reliability', 'significance', 'correlation', 'variable',
-  ],
-  travel: [
-    'destination', 'itinerary', 'accommodation', 'reservation', 'passport',
-    'visa', 'immigration', 'customs', 'baggage', 'terminal', 'departure',
-    'arrival', 'boarding', 'connection', 'layover', 'tourist', 'attraction',
-    'landmark', 'monument', 'museum', 'gallery', 'excursion', 'adventure',
-    'exploration', 'navigation', 'orientation', 'transportation', 'transit',
-    'infrastructure', 'hospitality', 'cuisine', 'culinary', 'traditional',
-  ],
-  technical: [
-    'algorithm', 'database', 'framework', 'library', 'function',
-    'variable', 'constant', 'parameter', 'argument', 'return',
-    'asynchronous', 'synchronous', 'callback', 'promise', 'async',
-    'await', 'middleware', 'endpoint', 'request', 'response',
-    'authentication', 'authorization', 'encryption', 'decryption',
-    'protocol', 'architecture', 'deployment', 'integration', 'API',
-    'frontend', 'backend', 'fullstack', 'devops', 'repository',
-  ],
-  ielts: [
-    'band', 'score', 'academic', 'general', 'listening', 'reading',
-    'writing', 'speaking', 'task', 'response', 'essay', 'report',
-    'letter', 'description', 'comparison', 'contrast', 'opinion',
-    'argument', 'discussion', 'advantage', 'disadvantage', 'solution',
-    'problem', 'cause', 'effect', 'example', 'evidence', 'coherence',
-    'cohesion', 'vocabulary', 'grammar', 'pronunciation', 'fluency',
-    'intonation', 'paraphrase', 'synonym', 'collocation', 'idiom',
-  ],
-  toefl: [
-    'independent', 'integrated', 'conversation', 'lecture', 'passage',
-    'comprehension', 'inference', 'purpose', 'attitude', 'rhetorical',
-    'summary', 'outline', 'note-taking', 'main', 'detail', 'imply',
-    'infer', 'synthesize', 'organize', 'develop', 'support', 'clarify',
-    'exemplify', 'contrast', 'compare', 'classify', 'categorize',
-    'sequence', 'process', 'cause', 'effect', 'problem', 'solution',
-  ],
+interface WordSet {
+  easy: string[]
+  medium: string[]
+  hard: string[]
+  expert: string[]
 }
 
-export function getWordsByCategory(category: string): string[] {
-  return wordBanks[category] || wordBanks.general
+const WORD_BANK: Record<string, WordSet> = {
+  general: {
+    easy: ['cat', 'dog', 'sun', 'run', 'fun', 'box', 'red', 'big', 'hot', 'old'],
+    medium: ['house', 'water', 'friend', 'family', 'school', 'happy', 'music', 'garden'],
+    hard: ['beautiful', 'adventure', 'knowledge', 'experience', 'development'],
+    expert: ['extraordinary', 'responsibility', 'consciousness', 'philosophical'],
+  },
+  business: {
+    easy: ['job', 'work', 'boss', 'pay', 'deal', 'plan', 'team', 'sale'],
+    medium: ['meeting', 'project', 'manager', 'contract', 'budget', 'strategy'],
+    hard: ['negotiation', 'entrepreneur', 'investment', 'partnership'],
+    expert: ['entrepreneurship', 'organizational', 'differentiation'],
+  },
+  academic: {
+    easy: ['test', 'book', 'learn', 'class', 'study'],
+    medium: ['research', 'analysis', 'academic', 'scholar', 'thesis'],
+    hard: ['dissertation', 'methodology', 'bibliography', 'hypothesis'],
+    expert: ['epistemological', 'methodological', 'interdisciplinary'],
+  },
+  travel: {
+    easy: ['trip', 'tour', 'map', 'hotel', 'flight'],
+    medium: ['passport', 'luggage', 'itinerary', 'destination', 'reservation'],
+    hard: ['accommodation', 'transportation', 'international', 'exploration'],
+    expert: ['multiculturalism', 'anthropological', 'archaeological'],
+  },
+  tech: {
+    easy: ['app', 'web', 'code', 'data', 'user'],
+    medium: ['software', 'hardware', 'network', 'database', 'algorithm'],
+    hard: ['programming', 'development', 'architecture', 'optimization'],
+    expert: ['microarchitecture', 'containerization', 'virtualization'],
+  },
 }
 
-export function getRandomWord(category: string): string {
-  const words = getWordsByCategory(category)
-  return words[Math.floor(Math.random() * words.length)]
+export function getWordsByCategory(category: string, difficulty: string): string[] {
+  const set = WORD_BANK[category] || WORD_BANK.general
+  
+  // Combine current difficulty + below
+  let words: string[] = []
+  if (difficulty === 'expert') words = [...set.expert]
+  if (difficulty === 'hard' || difficulty === 'expert') words = [...words, ...set.hard]
+  if (difficulty === 'medium' || difficulty === 'hard' || difficulty === 'expert') {
+    words = [...words, ...set.medium]
+  }
+  words = [...words, ...set.easy]
+  
+  return words
+}
+
+export function addCustomWord(category: string, word: string, difficulty: string): void {
+  if (!WORD_BANK[category]) {
+    WORD_BANK[category] = { easy: [], medium: [], hard: [], expert: [] }
+  }
+  WORD_BANK[category][difficulty as keyof WordSet].push(word)
 }
